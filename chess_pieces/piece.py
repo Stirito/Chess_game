@@ -25,77 +25,9 @@ class Piece():
                 center_x = move[1][0] * (600 // 8) + ((600 // 8) // 2)
                 center_y = move[1][1] * (600 // 8) + ((600 // 8) // 2)
                 pygame.draw.circle(window, (0, 125, 0), (center_x, center_y), 25,5)
-    def raycast(self,board,nb_to_go,direction="UP",isattack=False):
-        raycast = []
-
-        if direction == "UP":
-
-            for x in range(1):
-                for y in range(nb_to_go):
-                    first_case_y = self.y-1
-                    tile_to_analyse= board[first_case_y-y][self.x]
-
-
-                    if issubclass(tile_to_analyse.__class__, Piece):
-                        if isattack == True:
-                            raycast.append(("Ennemy",(self.x, first_case_y - y)))
-                            return raycast
-                        elif tile_to_analyse.side != self.side or tile_to_analyse.side == self.side:
-                            return raycast
-                    else:
-
-                        raycast.append((self.x, first_case_y - y))
-        elif direction == "UP_RIGHT":
-            for x in range(nb_to_go):
-                for y in range(1):
-                    z = self.y - (x+1)
-                    first_case_x = self.x+1
-                    if issubclass(board[z-y][first_case_x+x].__class__,Piece):
-                        piece = board[z-y][first_case_x+x]
-                        if piece.side != self.side:
-                            raycast.append(("Ennemy", (first_case_x+x,z-y)))
-                            return raycast
-                    else:
-
-                        raycast.append((first_case_x+x,z-y))
-
-        elif direction == "DOWN":
-            for x in range(1):
-                for y in range(nb_to_go):
-                    first_case_y = self.y+1
-                    raycast.append((self.x,first_case_y+y))
-        elif direction == "RIGHT":
-            for x in range(nb_to_go):
-                for y in range(1):
-
-                    first_case_x = self.x+1
-                    raycast.append((first_case_x+x,self.y))
-        elif direction =="LEFT":
-            for x in range(nb_to_go):
-                for y in range(1):
-                    first_case_x = self.x-1
-                    raycast.append((first_case_x-x,self.y))
-
-        return raycast
-
+ 
     def check_moves(self,window,board):
         moves = []
-
-        if isinstance(self,Pions):
-            moves.extend(self.raycast(board,1,"UP_RIGHT"))
-            if self.is_line(6) and self.side == "BLANC":
-                moves.extend(self.raycast(board,2,"UP"))
-            elif self.is_line(1) and self.side == "NOIR":
-                moves.extend(self.raycast(board, 2, "DOWN"))
-            elif self.side == "BLANC":
-                moves.extend(self.raycast(board, 1, "UP"))
-            else:
-                moves.extend(self.raycast(board, 1, "DOWN"))
-
-
-
-
-        self.moves = moves
 
     def is_line(self, line):
         return self.y == line
